@@ -1,6 +1,6 @@
 # vite-basic-setup
 
-Skelton project used in later projects.
+Skeleton project used in later projects.
 
 When run this project displays an input and a list. 
 Typing in the input and pressing enter adds the text to the list.
