@@ -9,23 +9,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
   itemList = document.getElementById("itemList");
   clearButton = document.getElementById("clearButton");
 
-  inputField.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      if (!editing) {
-        appendItem(inputField.value);
-        inputField.value = "";
-      } else {
-		  editing.innerText = inputField.value;
-		  editing = "";
-		  inputField.value = "";
-		}
-    }
-  });
+  inputField.addEventListener("keydown", keyDown);
   itemList.addEventListener("click", itemClick);
-  clearButton.addEventListener("click", (event) => {
-    itemList.innerHTML = "";
-  });
+  clearButton.addEventListener("click", clearList);
 });
+
+const keyDown = async (event) => {
+  if (event.key === "Enter") {
+    if (!editing) {
+      appendItem(inputField.value);
+    } else {
+      editing.innerText = inputField.value;
+    }
+    inputField.value = "";
+    editing = "";
+  }
+};
 
 const itemClick = async (event) => {
   editing = event.target;
