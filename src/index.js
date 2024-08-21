@@ -1,4 +1,3 @@
-// This is the main entry point of the application
 let inputField;
 let itemList;
 let clearButton;
