@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		  editing.innerText = inputField.value;
 		  editing = "";
 		  inputField.value = "";
-		  inputField.focus();
 		}
     }
   });
