@@ -28,7 +28,7 @@ const keyDown = async (event) => {
 const itemClick = async (event) => {
   editing = event.target;
   inputField.value = editing.innerText;
-  editing.focus();
+  inputField.focus();
 };
 
 async function clearList() {
