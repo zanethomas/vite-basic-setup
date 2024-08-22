@@ -59,6 +59,10 @@ async function clearList() {
 }
 
 const appendItem = (row) => {
+<<<<<<< HEAD
+=======
+	console.log('row', row)
+>>>>>>> db5b088 (added functionality)
   const li = document.createElement("li");
 
   li.innerText = row.item;
