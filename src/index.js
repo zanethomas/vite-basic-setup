@@ -59,7 +59,6 @@ async function clearList() {
 }
 
 const appendItem = (row) => {
-	console.log('row', row)
   const li = document.createElement("li");
 
   li.innerText = row.item;
