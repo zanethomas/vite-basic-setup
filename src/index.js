@@ -1,4 +1,3 @@
-
 import {
   openDatabase,
   insertItem,
@@ -39,9 +38,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 const keyDown = async (event) => {
   if (event.key === "Enter") {
     if (!editing) {
-		const result = await insertItem(inputField.value);
-
-		appendItem(result.rows.item(0));
+      appendItem(inputField.value, await insertItem(inputField.value));
     } else {
       editing.innerText = inputField.value;
       updateItem(editing.id, inputField.value);
