@@ -1,9 +1,23 @@
+import {
+  openDatabase,
+  insertItem,
+  updateItem,
+  allItems,
+  deleteAllItems,
+} from "@/database";
+import { DummyConnector } from "@/connectors/dummy";
+
 let inputField;
 let itemList;
 let clearButton;
 let editing = "";
 
-document.addEventListener("DOMContentLoaded", (event) => {
+const config = {
+  connector: DummyConnector,
+  dbFilename: "add-powersync.sqlite",
+};
+
+document.addEventListener("DOMContentLoaded", async (event) => {
   inputField = document.getElementById("inputField");
   itemList = document.getElementById("itemList");
   clearButton = document.getElementById("clearButton");
@@ -11,14 +25,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
   inputField.addEventListener("keydown", keyDown);
   itemList.addEventListener("click", itemClick);
   clearButton.addEventListener("click", clearList);
+
+  await openDatabase(config);
+
+  await allItems().then((rows) => {
+    populateList(rows);
+    inputField.placeholder = "Type something and press Enter";
+  });
 });
 
 const keyDown = async (event) => {
   if (event.key === "Enter") {
     if (!editing) {
-      appendItem(inputField.value);
+      appendItem(inputField.value, await insertItem(inputField.value));
     } else {
       editing.innerText = inputField.value;
+      updateItem(editing.id, inputField.value);
     }
     inputField.value = "";
     editing = "";
@@ -28,16 +50,26 @@ const keyDown = async (event) => {
 const itemClick = async (event) => {
   editing = event.target;
   inputField.value = editing.innerText;
-  editing.focus();
+  inputField.focus();
 };
 
 async function clearList() {
+  deleteAllItems();
   itemList.innerHTML = "";
 }
 
-const appendItem = (text) => {
-  const item = document.createElement("li");
+const appendItem = (row) => {
+	console.log('row', row)
+  const li = document.createElement("li");
 
-  item.innerText = text;
-  itemList.appendChild(item);
+  li.innerText = row.item;
+  li.id = row.id;
+
+  itemList.appendChild(li);
+};
+
+const populateList = (rows) => {
+  for (const row of rows) {
+    appendItem(row);
+  }
 };
