@@ -4,20 +4,20 @@ import { schema } from "./schema";
 let PowerSync;
 
 const create = (config) => {
-  console.log("creating PowerSyncDatabase");
+  console.log("Creating PowerSyncDatabase");
   PowerSync = new PowerSyncDatabase({
     schema,
     database: {
       dbFilename: config.dbFilename,
     },
   });
-  console.log("PowerSyncDatabase created");
+  console.log("PowerSyncDatabase Created");
 };
 
 const connect = async (config) => {
-  console.log("connecting PowerSyncDatabase");
+  console.log("Connecting PowerSyncDatabase");
   await PowerSync.connect(new config.connector(config));
-  console.log("PowerSyncDatabase connected");
+  console.log("PowerSyncDatabase Connected");
 };
 
 export const openDatabase = async (config) => {
@@ -25,15 +25,15 @@ export const openDatabase = async (config) => {
   await connect(config);
 };
 
-export const insertItem = async (item) => {
+export const insertItem = async (text) => {
   return PowerSync.execute(
-    "INSERT INTO list(id, item) VALUES(uuid(), ?) RETURNING *",
-    [item]
+    "INSERT INTO list(id, text) VALUES(uuid(), ?) RETURNING *",
+    [text]
   );
 };
 
-export const updateItem = async (id, item) => {
-  PowerSync.execute("UPDATE list SET item = ? WHERE id = ?", [item, id]);
+export const updateItem = async (id, text) => {
+  PowerSync.execute("UPDATE list SET text = ? WHERE id = ?", [text, id]);
 };
 
 export const deleteItem = async (id) => {
