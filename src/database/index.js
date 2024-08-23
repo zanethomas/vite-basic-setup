@@ -26,8 +26,8 @@ export const connect = async (config) => {
   });
   console.log("connecting to supabase ...");
   Supabase = new config.connector(config);
-//   Supabase.init();
-  PowerSync.init();
+  Supabase.init();
+//   PowerSync.init();
   await PowerSync.connect(Supabase);
   console.log("connected to supabase");
   console.log("connected to powersync");
