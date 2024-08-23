@@ -46,8 +46,8 @@ const keyDown = async (event) => {
     if (!editing) {
       const result = await insertItem(inputField.value);
 
-      // appendItem(result.rows.item(0));
-      appendItem(result.data[0]);
+      appendItem(result.rows.item(0));
+      // appendItem(result.data[0]);
     } else {
       editing.innerText = inputField.value;
       updateItem(editing.id, inputField.value);

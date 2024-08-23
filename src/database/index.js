@@ -49,28 +49,28 @@ export const insertItem = async (text) => {
 };
 
 export const updateItem = async (id, text) => {
-  return await Supabase.client.from("list").update({ text }).eq("id", id);
+//   return await Supabase.client.from("list").update({ text }).eq("id", id);
 
-  //   return PowerSync.execute("UPDATE list SET text = ? WHERE id = ?", [text, id]);
+    return PowerSync.execute("UPDATE list SET text = ? WHERE id = ?", [text, id]);
 };
 
 export const deleteItem = async (id) => {
-  return await Supabase.client.from("list").delete().eq("id", id);
+//   return await Supabase.client.from("list").delete().eq("id", id);
 
-//   return PowerSync.execute("DELETE FROM list WHERE id = ?", [id]);
+  return PowerSync.execute("DELETE FROM list WHERE id = ?", [id]);
 };
 
 export const allItems = async () => {
-  return (await Supabase.client.from("list").select().order('created_at')).data;
+//   return (await Supabase.client.from("list").select().order('created_at')).data;
 
-//   return await PowerSync.getAll("SELECT * FROM list ORDER BY created_at");
+  return await PowerSync.getAll("SELECT * FROM list ORDER BY created_at");
 };
 
 export const deleteAllItems = async () => {
-	return await Supabase.client
-	.from("list")
-	.delete()
-	.neq("id", "00000000-0000-0000-0000-000000000000");
+	// return await Supabase.client
+	// .from("list")
+	// .delete()
+	// .neq("id", "00000000-0000-0000-0000-000000000000");
 
-//   return PowerSync.execute("DELETE FROM list");
+  return PowerSync.execute("DELETE FROM list");
 };
