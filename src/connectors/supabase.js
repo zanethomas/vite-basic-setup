@@ -19,11 +19,11 @@ export class SupabaseConnector extends BaseObserver {
   }
 
   async init() {
-	console.log("init called");
+    console.log("init called");
     if (this.ready) {
       return;
     }
-	 console.log("initiating");
+    console.log("initiating");
     const sessionResponse = await this.client.auth.getSession();
     this.updateSession(sessionResponse.data.session);
 
@@ -32,7 +32,7 @@ export class SupabaseConnector extends BaseObserver {
   }
 
   async fetchCredentials() {
-	 console.log("fetching credentials");
+    console.log("fetching credentials");
     const {
       data: { session },
       error,
@@ -53,6 +53,67 @@ export class SupabaseConnector extends BaseObserver {
     };
     console.log("credentials", credentials);
     return credentials;
+  }
+
+  async uploadData(database) {
+    const transaction = await database.getNextCrudTransaction();
+
+    if (!transaction) {
+      return;
+    }
+
+    let lastOp = null;
+    try {
+      // Note: If transactional consistency is important, use database functions
+      // or edge functions to process the entire transaction in a single call.
+      for (const op of transaction.crud) {
+        lastOp = op;
+        const table = this.client.from(op.table);
+        let result;
+        switch (op.op) {
+          case "PUT":
+            const record = { ...op.opData, id: op.id };
+            result = await table.upsert(record);
+            break;
+          case "PATCH":
+            result = await table.update(op.opData).eq("id", op.id);
+            break;
+          case "DELETE":
+            result = await table.delete().eq("id", op.id);
+            break;
+        }
+
+        if (result.error) {
+          console.error(result.error);
+          throw new Error(
+            `Could not update Supabase. Received error: ${result.error.message}`
+          );
+        }
+      }
+
+      await transaction.complete();
+    } catch (ex) {
+      console.debug(ex);
+      if (
+        typeof ex.code == "string" &&
+        FATAL_RESPONSE_CODES.some((regex) => regex.test(ex.code))
+      ) {
+        /**
+         * Instead of blocking the queue with these errors,
+         * discard the (rest of the) transaction.
+         *
+         * Note that these errors typically indicate a bug in the application.
+         * If protecting against data loss is important, save the failing records
+         * elsewhere instead of discarding, and/or notify the user.
+         */
+        console.log(`Data upload error - discarding ${lastOp}`, ex);
+        await transaction.complete();
+      } else {
+        // Error may be retryable - e.g. network error or temporary server error.
+        // Throwing an error here causes this call to be retried after a delay.
+        throw ex;
+      }
+    }
   }
 
   async loginAnon() {

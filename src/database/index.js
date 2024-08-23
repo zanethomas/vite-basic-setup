@@ -26,9 +26,13 @@ export const connect = async (config) => {
   });
   console.log("connecting to supabase ...");
   Supabase = new config.connector(config);
-  Supabase.init();
+//   Supabase.init();
 //   PowerSync.init();
   await PowerSync.connect(Supabase);
+  await PowerSync.waitForFirstSync().then(() => {
+	 console.log("First sync done");
+  });
+
   console.log("connected to supabase");
   console.log("connected to powersync");
 };
@@ -54,8 +58,6 @@ export const insertItem = async (text) => {
 export const updateItem = async (id, text) => {
   //   return await Supabase.client.from("list").update({ text }).eq("id", id);
 
-  console.log(PowerSync);
-  debugger;
   return PowerSync.execute("UPDATE list SET text = ? WHERE id = ?", [text, id]);
 };
 
