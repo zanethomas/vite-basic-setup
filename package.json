@@ -15,6 +15,7 @@
   "dependencies": {
     "@journeyapps/wa-sqlite": "^0.2.0",
     "@powersync/web": "^1.6.0",
+    "@supabase/supabase-js": "^2.45.1",
     "vite-plugin-top-level-await": "^1.4.4",
     "vite-plugin-wasm": "^3.3.0"
   }

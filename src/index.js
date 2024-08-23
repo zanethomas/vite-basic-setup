@@ -1,4 +1,3 @@
-
 import {
   openDatabase,
   insertItem,
@@ -6,7 +5,7 @@ import {
   allItems,
   deleteAllItems,
 } from "@/database";
-import { DummyConnector } from "@/connectors/dummy";
+import { SupabaseConnector } from "@/connectors/supabase";
 
 let inputField;
 let itemList;
@@ -14,8 +13,11 @@ let clearButton;
 let editing = "";
 
 const config = {
-  connector: DummyConnector,
-  dbFilename: "add-powersync.sqlite",
+  supabaseUrl: import.meta.env.VITE_SUPABASE_URL,
+  powersyncUrl: import.meta.env.VITE_POWERSYNC_URL,
+  supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+  connector: SupabaseConnector,
+  filename: "add-supabase.sqlite",
 };
 
 document.addEventListener("DOMContentLoaded", async (event) => {
@@ -29,21 +31,23 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
   inputField.disabled = true;
   inputField.placeholder = "Opening Database...";
-  await openDatabase(config);
 
+  await openDatabase(config);
   await allItems().then((rows) => {
+    console.log("rows", rows);
     populateList(rows);
     inputField.placeholder = "Type something and press Enter";
-	 inputField.disabled = false;
+    inputField.disabled = false;
   });
 });
 
 const keyDown = async (event) => {
   if (event.key === "Enter") {
     if (!editing) {
-		const result = await insertItem(inputField.value);
+      const result = await insertItem(inputField.value);
 
-		appendItem(result.rows.item(0));
+      // appendItem(result.rows.item(0));
+      appendItem(result.data[0]);
     } else {
       editing.innerText = inputField.value;
       updateItem(editing.id, inputField.value);

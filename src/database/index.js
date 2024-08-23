@@ -2,8 +2,9 @@ import { PowerSyncDatabase } from "@powersync/web";
 import { schema } from "./schema";
 
 let PowerSync;
+let Supabase;
 
-const create = (config) => {
+const create = async (config) => {
   console.log("Creating PowerSyncDatabase");
   PowerSync = new PowerSyncDatabase({
     schema,
@@ -11,39 +12,65 @@ const create = (config) => {
       dbFilename: config.dbFilename,
     },
   });
+  await PowerSync.init();
+
   console.log("PowerSyncDatabase Created");
 };
 
-const connect = async (config) => {
-  console.log("Connecting PowerSyncDatabase");
-  await PowerSync.connect(new config.connector(config));
-  console.log("PowerSyncDatabase Connected");
+export const connect = async (config) => {
+  console.log("connecting to powersync ...");
+  PowerSync = new PowerSyncDatabase({
+    schema,
+    database: {
+      dbFilename: config.dbFilename,
+    },
+  });
+  await PowerSync.init();
+  console.log("connecting to supabase ...");
+  await PowerSync.connect((Supabase = new config.connector(config)));
+
+  // await PowerSync.connect(supabase = new SupabaseConnector(config));
+  console.log("connected to supabase");
+  console.log("connected to powersync");
 };
 
 export const openDatabase = async (config) => {
-  create(config);
+  await create(config);
   await connect(config);
 };
 
 export const insertItem = async (text) => {
-  return PowerSync.execute(
-    "INSERT INTO list(id, text) VALUES(uuid(), ?) RETURNING *",
-    [text]
-  );
+  return await Supabase.client.from("list").insert({ text }).select("*");
+
+  //   return PowerSync.execute(
+  //     "INSERT INTO list(id, text) VALUES(uuid(), ?) RETURNING *",
+  //     [text]
+  //   );
 };
 
 export const updateItem = async (id, text) => {
-  PowerSync.execute("UPDATE list SET text = ? WHERE id = ?", [text, id]);
+  return await Supabase.client.from("list").update({ text }).eq("id", id);
+
+  //   return PowerSync.execute("UPDATE list SET text = ? WHERE id = ?", [text, id]);
 };
 
 export const deleteItem = async (id) => {
-  PowerSync.execute("DELETE FROM list WHERE id = ?", [id]);
+  return await Supabase.client.from("list").delete().eq("id", id);
+
+//   return PowerSync.execute("DELETE FROM list WHERE id = ?", [id]);
 };
 
 export const allItems = async () => {
-  return PowerSync.getAll("SELECT * FROM list");
+  return (await Supabase.client.from("list").select().order('created_at')).data;
+
+//   return await PowerSync.getAll("SELECT * FROM list ORDER BY created_at");
 };
 
 export const deleteAllItems = async () => {
-  PowerSync.execute("DELETE FROM list");
+	return await Supabase.client
+	.from("list")
+	.delete()
+	.neq("id", "00000000-0000-0000-0000-000000000000");
+
+//   return PowerSync.execute("DELETE FROM list");
 };
