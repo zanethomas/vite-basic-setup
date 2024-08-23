@@ -19,15 +19,40 @@ export class SupabaseConnector extends BaseObserver {
   }
 
   async init() {
+	console.log("init called");
     if (this.ready) {
       return;
     }
-
+	 console.log("initiating");
     const sessionResponse = await this.client.auth.getSession();
     this.updateSession(sessionResponse.data.session);
 
     this.ready = true;
     this.iterateListeners((cb) => cb.initialized?.());
+  }
+
+  async fetchCredentials() {
+	 console.log("fetching credentials");
+    const {
+      data: { session },
+      error,
+    } = await this.client.auth.getSession();
+
+    if (!session || error) {
+      throw new Error(`Could not fetch Supabase credentials: ${error}`);
+    }
+
+    console.log("session expires at", session.expires_at);
+
+    const credentials = {
+      endpoint: this.config.powersyncUrl,
+      token: session.access_token ?? "",
+      expiresAt: session.expires_at
+        ? new Date(session.expires_at * 1000)
+        : undefined,
+    };
+    console.log("credentials", credentials);
+    return credentials;
   }
 
   async loginAnon() {

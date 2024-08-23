@@ -1,4 +1,5 @@
 import {
+  loginAnon,
   openDatabase,
   insertItem,
   updateItem,
@@ -33,6 +34,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
   inputField.placeholder = "Opening Database...";
 
   await openDatabase(config);
+  await loginAnon();
   await allItems().then((rows) => {
     console.log("rows", rows);
     populateList(rows);
@@ -64,6 +66,8 @@ const itemClick = async (event) => {
 };
 
 async function clearList() {
+  //   const result = await allItems();
+  //   console.log("result", result);
   deleteAllItems();
   itemList.innerHTML = "";
 }
