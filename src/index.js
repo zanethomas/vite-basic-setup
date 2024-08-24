@@ -1,3 +1,4 @@
+
 import {
   loginAnon,
   openDatabase,
@@ -36,7 +37,6 @@ document.addEventListener("DOMContentLoaded", async (event) => {
   await openDatabase(config);
   await loginAnon();
   await allItems().then((rows) => {
-    console.log("rows", rows);
     populateList(rows);
     inputField.placeholder = "Type something and press Enter";
     inputField.disabled = false;
@@ -49,7 +49,6 @@ const keyDown = async (event) => {
       const result = await insertItem(inputField.value);
 
       appendItem(result.rows.item(0));
-      // appendItem(result.data[0]);
     } else {
       editing.innerText = inputField.value;
       updateItem(editing.id, inputField.value);
@@ -66,8 +65,6 @@ const itemClick = async (event) => {
 };
 
 async function clearList() {
-  //   const result = await allItems();
-  //   console.log("result", result);
   deleteAllItems();
   itemList.innerHTML = "";
 }
