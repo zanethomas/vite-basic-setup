@@ -1,6 +1,16 @@
 import { BaseObserver } from "@powersync/web";
 import { createClient } from "@supabase/supabase-js";
 
+const FATAL_RESPONSE_CODES = [
+	// Postgres errors
+	/^22\d{3}$/, // Data exception
+	/^23\d{3}$/, // Integrity constraint violation
+	/^42\d{3}$/, // Syntax error or access rule violation
+	// Supabase errors
+	/^PGRST\d{3}$/, // PostgREST errors
+];
+
+
 export class SupabaseConnector extends BaseObserver {
   constructor(config) {
     super();
