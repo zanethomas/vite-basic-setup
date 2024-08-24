@@ -14,15 +14,8 @@ const create = (config) => {
   console.log("PowerSyncDatabase Created");
 };
 
-const connect = async (config) => {
-  console.log("Connecting PowerSyncDatabase");
-  await PowerSync.connect(new config.connector(config));
-  console.log("PowerSyncDatabase Connected");
-};
-
 export const openDatabase = async (config) => {
   create(config);
-  await connect(config);
 };
 
 export const insertItem = async (text) => {

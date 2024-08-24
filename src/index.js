@@ -6,7 +6,6 @@ import {
   allItems,
   deleteAllItems,
 } from "@/database";
-import { DummyConnector } from "@/connectors/dummy";
 
 let inputField;
 let itemList;
@@ -14,7 +13,6 @@ let clearButton;
 let editing = "";
 
 const config = {
-  connector: DummyConnector,
   dbFilename: "add-powersync.sqlite",
 };
 
