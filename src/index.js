@@ -7,7 +7,7 @@ import {
   allItems,
   deleteAllItems,
 } from "@/database";
-import { SupabaseConnector } from "@/connectors/supabase";
+import { SupabaseConnector } from "@/supabase";
 
 let inputField;
 let itemList;
