@@ -18,19 +18,6 @@ export class SupabaseConnector extends BaseObserver {
     this.ready = false;
   }
 
-  async init() {
-    console.log("init called");
-    if (this.ready) {
-      return;
-    }
-    console.log("initiating");
-    const sessionResponse = await this.client.auth.getSession();
-    this.updateSession(sessionResponse.data.session);
-
-    this.ready = true;
-    this.iterateListeners((cb) => cb.initialized?.());
-  }
-
   async fetchCredentials() {
     console.log("fetching credentials");
     const {
