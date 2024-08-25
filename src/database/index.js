@@ -16,13 +16,6 @@ const create = (config) => {
 };
 
 export const connect = async (config) => {
-  console.log("connecting to powersync ...");
-  PowerSync = new PowerSyncDatabase({
-    schema,
-    database: {
-      dbFilename: config.dbFilename,
-    },
-  });
   console.log("connecting to supabase ...");
 
   await PowerSync.connect(Supabase = new config.connector(config));
