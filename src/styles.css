@@ -5,8 +5,8 @@ header {
 }
 
 #wrapper {
-	margin: 0 auto;
-	width: 80%;
+	margin: auto;
+	width: fit-content;
 }
 #inputField {
 	padding: 10px;
@@ -17,12 +17,12 @@ header {
 #listWrapper {
 	margin-top: 0px;
 	width:fit-content;
-	min-width:400pxl
 }
 #itemList {
 	margin-top: 0px;
 	list-style-type: none;
 	padding-left: 0;
+	width:300px;
 }
 
 #itemList li {
