@@ -60,6 +60,7 @@ const itemClick = async (event) => {
 async function clearList() {
   deleteAllItems();
   itemList.innerHTML = "";
+  inputField.value = "";
 }
 
 const appendItem = (row) => {

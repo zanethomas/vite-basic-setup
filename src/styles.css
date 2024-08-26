@@ -5,8 +5,8 @@ header {
 }
 
 #wrapper {
-	margin: 0 auto;
-	width: 80%;
+	margin: auto;
+	width: fit-content;
 }
 #inputField {
 	padding: 10px;
