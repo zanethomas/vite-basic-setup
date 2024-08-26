@@ -33,6 +33,7 @@ const itemClick = async (event) => {
 
 async function clearList() {
   itemList.innerHTML = "";
+  inputField.value = "";
 }
 
 const appendItem = (text) => {
