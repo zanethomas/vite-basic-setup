@@ -9,7 +9,7 @@ import {
 let inputField;
 let itemList;
 let clearButton;
-let editing = "";
+let editing = null;
 
 const config = {
   dbFilename: "add-powersync.sqlite",
@@ -46,7 +46,7 @@ const keyDown = async (event) => {
       updateItem(editing.id, inputField.value);
     }
     inputField.value = "";
-    editing = "";
+    editing = null;
   }
 };
 
