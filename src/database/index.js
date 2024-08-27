@@ -18,6 +18,14 @@ export const openDatabase = async (config) => {
   create(config);
 };
 
+export function watchList(onResult) {
+  PowerSync.watch(`SELECT * FROM list ORDER BY created_at`, [], {
+    onResult: (result) => {
+      onResult(result.rows);
+    },
+  });
+}
+
 export const insertItem = async (text) => {
   return PowerSync.execute(
     "INSERT INTO list(id, text) VALUES(uuid(), ?) RETURNING *",

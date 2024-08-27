@@ -4,6 +4,7 @@ import {
   updateItem,
   allItems,
   deleteAllItems,
+  watchList
 } from "@/database";
 
 let inputField;
@@ -28,21 +29,21 @@ document.addEventListener("DOMContentLoaded", async (event) => {
   inputField.placeholder = "Opening Database...";
   await openDatabase(config);
 
-  await allItems().then((rows) => {
-    populateList(rows);
-    inputField.placeholder = "Type something and press Enter";
-	 inputField.disabled = false;
+  watchList((rows) => {
+    populateList(rows._array);
   });
+
+  await allItems();
+
+  inputField.placeholder = "Type something and press Enter";
+  inputField.disabled = false;
 });
 
 const keyDown = async (event) => {
   if (event.key === "Enter") {
     if (!editing) {
-		const result = await insertItem(inputField.value);
-
-		appendItem(result.rows.item(0));
+      insertItem(inputField.value);
     } else {
-      editing.innerText = inputField.value;
       updateItem(editing.id, inputField.value);
     }
     inputField.value = "";
@@ -57,9 +58,8 @@ const itemClick = async (event) => {
 };
 
 async function clearList() {
-  deleteAllItems();
-  itemList.innerHTML = "";
-  inputField.value = "";
+	inputField.value = "";
+	deleteAllItems();
 }
 
 const appendItem = (row) => {
@@ -72,6 +72,8 @@ const appendItem = (row) => {
 };
 
 const populateList = (rows) => {
+  itemList.innerHTML = "";
+
   for (const row of rows) {
     appendItem(row);
   }
