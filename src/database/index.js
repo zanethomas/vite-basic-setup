@@ -18,9 +18,9 @@ const create = (config) => {
 export const connect = async (config) => {
   console.log("connecting to supabase ...");
 
-  await PowerSync.connect(Supabase = new config.connector(config));
+  await PowerSync.connect((Supabase = new config.connector(config)));
   await PowerSync.waitForFirstSync().then(() => {
-	 console.log("First sync done");
+    console.log("First sync done");
   });
 
   console.log("connected to supabase");
@@ -35,6 +35,14 @@ export const openDatabase = async (config) => {
   create(config);
   await connect(config);
 };
+
+export function watchList(onResult) {
+  PowerSync.watch(`SELECT * FROM list ORDER BY created_at`, [], {
+    onResult: (result) => {
+      onResult(result.rows);
+    },
+  });
+}
 
 export const insertItem = async (text) => {
   return PowerSync.execute(

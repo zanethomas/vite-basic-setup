@@ -1,4 +1,3 @@
-
 import {
   loginAnon,
   openDatabase,
@@ -6,6 +5,7 @@ import {
   updateItem,
   allItems,
   deleteAllItems,
+  watchList,
 } from "@/database";
 import { SupabaseConnector } from "@/supabase";
 
@@ -36,21 +36,22 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
   await openDatabase(config);
   await loginAnon();
-  await allItems().then((rows) => {
-    populateList(rows);
-    inputField.placeholder = "Type something and press Enter";
-    inputField.disabled = false;
+
+  watchList((rows) => {
+    populateList(rows._array);
   });
+
+  await allItems();
+
+  inputField.placeholder = "Type something and press Enter";
+  inputField.disabled = false;
 });
 
 const keyDown = async (event) => {
   if (event.key === "Enter") {
     if (!editing) {
-      const result = await insertItem(inputField.value);
-
-      appendItem(result.rows.item(0));
+      insertItem(inputField.value);
     } else {
-      editing.innerText = inputField.value;
       updateItem(editing.id, inputField.value);
     }
     inputField.value = "";
@@ -79,6 +80,7 @@ const appendItem = (row) => {
 };
 
 const populateList = (rows) => {
+  itemList.innerHTML = "";
   for (const row of rows) {
     appendItem(row);
   }
