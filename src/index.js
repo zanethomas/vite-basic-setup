@@ -1,7 +1,7 @@
 let inputField;
 let itemList;
 let clearButton;
-let editing = "";
+let editing = null;
 
 document.addEventListener("DOMContentLoaded", (event) => {
   inputField = document.getElementById("inputField");
@@ -21,7 +21,7 @@ const keyDown = async (event) => {
       editing.innerText = inputField.value;
     }
     inputField.value = "";
-    editing = "";
+    editing = null;
   }
 };
 
@@ -34,6 +34,7 @@ const itemClick = async (event) => {
 async function clearList() {
   itemList.innerHTML = "";
   inputField.value = "";
+  inputField.focus();
 }
 
 const appendItem = (text) => {
