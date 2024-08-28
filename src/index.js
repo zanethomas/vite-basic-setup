@@ -67,7 +67,8 @@ const itemClick = async (event) => {
 
 async function clearList() {
   deleteAllItems();
-  itemList.innerHTML = "";
+  inputField.value = "";
+  inputField.focus();
 }
 
 const appendItem = (row) => {
