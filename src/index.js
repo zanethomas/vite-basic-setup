@@ -4,7 +4,7 @@ import {
   updateItem,
   allItems,
   deleteAllItems,
-  watchList
+  watchList,
 } from "@/database";
 
 let inputField;
@@ -58,8 +58,9 @@ const itemClick = async (event) => {
 };
 
 async function clearList() {
-	inputField.value = "";
-	deleteAllItems();
+  deleteAllItems();
+  inputField.value = "";
+  inputField.focus();
 }
 
 const appendItem = (row) => {
