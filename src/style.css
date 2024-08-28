@@ -1,31 +1,33 @@
-
 header {
 	padding: 10px 0;
 	font-size: larger;
-}
+ }
 
-#wrapper {
+ #wrapper {
 	margin: auto;
 	width: fit-content;
-}
-#inputField {
+ }
+
+ #inputField {
 	padding: 10px;
 	font-size: 16px;
 	width: 300px;
-}
-
-#listWrapper {
+ }
+  
+ #listWrapper {
 	margin-top: 0px;
 	width:fit-content;
-}
-#itemList {
+ }
+ 
+ #itemList {
 	margin-top: 0px;
 	list-style-type: none;
 	padding-left: 0;
 	width:300px;
-}
-
-#itemList li {
+ }
+ 
+ #itemList li {
 	padding: 5px 0;
 	font-size: 18px;
-}
+ }
+ 

@@ -12,7 +12,7 @@ import { SupabaseConnector } from "@/supabase";
 let inputField;
 let itemList;
 let clearButton;
-let editing = "";
+let editing = null;
 
 const config = {
   supabaseUrl: import.meta.env.VITE_SUPABASE_URL,
@@ -55,7 +55,7 @@ const keyDown = async (event) => {
       updateItem(editing.id, inputField.value);
     }
     inputField.value = "";
-    editing = "";
+    editing = null;
   }
 };
 
